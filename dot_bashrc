@@ -1,0 +1,50 @@
+# .bashrc
+
+# Source global definitions
+if [ -f /etc/bashrc ]; then
+    . /etc/bashrc
+fi
+
+# User specific environment
+if ! [[ "$PATH" =~ "$HOME/.local/bin:$HOME/bin:" ]]; then
+    PATH="$HOME/.local/bin:$HOME/bin:$PATH"
+fi
+export PATH
+
+# Uncomment the following line if you don't like systemctl's auto-paging feature:
+# export SYSTEMD_PAGER=
+
+# User specific aliases and functions
+if [ -d ~/.bashrc.d ]; then
+    for rc in ~/.bashrc.d/*; do
+        if [ -f "$rc" ]; then
+            . "$rc"
+        fi
+    done
+fi
+unset rc
+
+eval "$(/home/zele/.local/bin/mise activate bash)" # added by https://mise.run/bash
+
+export SUDO_EDITOR="nvim"
+export VISUAL="nvim"
+export EDITOR="nvim"
+
+eval "$(fzf --bash)$"
+eval "$(zoxide init --cmd cd bash)"
+
+alias safe-charge='~/.local/bin/safe-charge.sh'
+alias full-charge='~/.local/bin/full-charge.sh'
+alias min-charge='~/.local/bin/min-charge.sh'
+alias time-config='~/.local/bin/time-config.sh'
+alias tws-refresh='~/.local/bin/tws-refresh.sh'
+alias data-fix='~/.local/bin/data-fix.sh'
+alias cat='bat'
+alias ls='eza --icons=auto'
+alias ll='eza -lag --icons=auto --git'
+alias tree='eza --tree --icons=auto'
+
+# Added by Antigravity CLI installer
+export PATH="$HOME/.local/bin:$PATH"
+export PATH="$HOME/.cargo/bin:$PATH"
+export PATH=$PATH:$(go env GOPATH)/bin

@@ -1,0 +1,5 @@
+[tools]
+node = "22"
+java = "21"
+bun = "latest"
+python = "3.13"
