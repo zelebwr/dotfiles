@@ -18,18 +18,18 @@ config.font = wezterm.font("SFMono Nerd Font")
 
 -- Appearance
 
-config.color_scheme = "Catppuccin Macchiato"
-require("catppuccin").setup({
-    flavour = "macchiato",
-    custom_highlights = fucntion(colors)
-        return {
-            LineNr = { fg = colors.subtext1 },
-            LineNrAboe = { fg = colors.subtext 1 },
-            LineNrBelow = { fg = colors.subtext 1 },
-            CursorLineNr = { fg = colors.lavender, bold = true },
-        }
-    end,
-})
+-- config.color_scheme = "Catppuccin Macchiato"
+-- require("catppuccin").setup({
+--    flavour = "macchiato",
+--    custom_highlights = fucntion(colors)
+--        return {
+--            LineNr = { fg = colors.subtext1 },
+--            LineNrAboe = { fg = colors.subtext 1 },
+--            LineNrBelow = { fg = colors.subtext 1 },
+--            CursorLineNr = { fg = colors.lavender, bold = true },
+--        }
+--    end,
+--})
 
 config.command_palette_bg_color = '#1e2030'
 config.command_palette_fg_color = '#cad3f5'
