@@ -13,6 +13,7 @@ return {
                 javascript = { 'eslint_d' },
                 typescript = { 'eslint_d' },
                 dockerfile = { 'hadolint' },
+                lua = { 'selene' },
             }
 
             -- Automatically downloads and links missing linters specified in linters

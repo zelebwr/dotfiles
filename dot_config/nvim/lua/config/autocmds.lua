@@ -113,3 +113,41 @@ autocmd({ 'FocusGained', 'TermClose', 'TermLeave' }, {
         end
     end,
 })
+
+---------------------------------
+---8. Export All  Custom Keymaps with Descriptons to KEYMAPS.md
+---------------------------------
+vim.api.nvim_create_user_command('ExportKeymaps', function()
+    local modes = { 'n', 'v', 'x', 'i' }
+    local mode_names = { n = 'Normal Mode', v = 'Visual Mode', x = 'Visual Only', i = 'Insert Mode' }
+    local lines = { '# Neovim Keymaps Cheat Sheet', '', 'Auto-generated keymap document.', '' }
+
+    for _, mode in ipairs(modes) do
+        local maps = vim.keymap.get(mode)
+        local mode_lines = {}
+
+        for _, map in ipairs(maps) do
+            -- Only document custom mappings tha thave a description string
+            if map.desc and map.desc ~= '' then
+                local lhs = map.lhs:gsub(' ', '<Space>')
+                local rhs = type(map.rhs) == 'string' and map.rhs or '[Lua Function]'
+                table.insert(mode_lines, string.format('| `%s` | %s | `%s` |', lhs, map.desc, rhs))
+            end
+        end
+
+        if #mode_lines > 0 then
+            table.insert(lines, '## ' .. mode_names[mode])
+            table.insert(lines, '')
+            table.insert(lines, '| Keybinding | Description | Action |')
+            table.insert(lines, '| :--- | :--- | :--- |')
+            for _, line in ipairs(mode_lines) do
+                table.insert(lines, line)
+            end
+            table.insert(lines, '')
+        end
+    end
+
+    local output_path = vim.fn.stdpath('config') .. '/KEYMAPS.md'
+    vim.fn.writefile(lines, output_path)
+    vim.notify('Exported keymaps to ' .. output_path, vim.log.levels.INFO)
+end, { desc = 'Export keymaps to KEYMAPS.md' })
