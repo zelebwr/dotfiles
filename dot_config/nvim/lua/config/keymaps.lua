@@ -61,10 +61,10 @@ keymap('n', '<leader>se', '<C-w>=', { desc = 'Make splits equal size' })
 keymap('n', '<leader>sx', '<cmd>close<CR>', { desc = 'Close current split' })
 
 -- Navigate between open Neovim Windows
-keymap('n', '<C-h>', '<C-w>h', { desc = 'Move to left window' })
-keymap('n', '<C-j>', '<C-w>j', { desc = 'Move to lower window' })
-keymap('n', '<C-k>', '<C-w>k', { desc = 'Move to uppper window' })
-keymap('n', '<C-l>', '<C-w>l', { desc = 'Move to right window' })
+keymap('n', '<leader>h', '<C-w>h', { desc = 'Move to left window' })
+keymap('n', '<leader>j', '<C-w>j', { desc = 'Move to lower window' })
+keymap('n', '<leader>k', '<C-w>k', { desc = 'Move to uppper window' })
+keymap('n', '<leader>l', '<C-w>l', { desc = 'Move to right window' })
 
 -- Resize split windows with arrows
 keymap('n', '<C-Up>', '<cmd>resize +2<CR>', { desc = 'Resize split window to be taller' })
