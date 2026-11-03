@@ -3,6 +3,15 @@
 --------------------------------
 local opt = vim.opt
 
+local is_windows = vim.uv.os_uname().sysname == "Windows_NT"
+
+if is_windows then
+    vim.opt.shell = "powershell.exe"
+    vim.opt.shellcmdflag = "-NoLogo -NoProfile -ExecutionPolicy RemoteSigned - Command"
+else
+    vim.opt.shell = "/bin/bash"
+end
+
 --------------------------------
 -- 1. Line Numbers & Navigation
 --------------------------------

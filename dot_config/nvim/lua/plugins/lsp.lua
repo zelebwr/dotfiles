@@ -29,7 +29,7 @@ return {
                                 local map = function(keys, func, desc)
                                     vim.keymap.set('n', keys, func, { buffer = bufnr, desc = 'LSP: ' .. desc })
                                 end
-                                map('gd', jim.lsp.buf.definition, '[G]oto [D]efinition')
+                                map('gd', vim.lsp.buf.definition, '[G]oto [D]efinition')
                                 map('gr', require('fzf-lua').lsp_references, '[G]oto [R]eferences')
                                 map('K', vim.lsp.buf.hover, 'Hover Documentation')
                                 map('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')

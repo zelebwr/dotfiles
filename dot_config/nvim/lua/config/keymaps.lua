@@ -24,6 +24,9 @@ keymap('n', 'N', 'Nzzzv', opts)
 -- Join lines wihtout moving cursor to the end
 keymap('n', 'J', 'mzJ`z', opts)
 
+-- Open Floating Diagnostic Window
+keymap('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Open floating diagnostic message' })
+
 -------------------------------------------
 -- Visual Mode Improvements
 -------------------------------------------
