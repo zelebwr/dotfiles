@@ -1,0 +1,26 @@
+# 1. Include default system Compose rules
+include "%L"
+
+# -------------------------------------------------------------
+# 2. Custom Arrow Shortcuts (Electron & Wayland Friendly)
+# -------------------------------------------------------------
+
+# Vertical Arrows (Visual ASCII combinations)
+<Multi_key> <asciicircum> <bar>          : "↑"   U2191    # Compose + ^ + |
+<Multi_key> <bar> <asciicircum>          : "↑"   U2191    # Compose + | + ^
+<Multi_key> <v> <bar>                    : "↓"   U2193    # Compose + v + |
+<Multi_key> <bar> <v>                    : "↓"   U2193    # Compose + | + v
+
+# Bidirectional & Logic Arrows
+<Multi_key> <less> <minus> <greater>     : "↔"   U2194    # Compose + < + - + >
+<Multi_key> <bar> <minus> <bar>          : "↕"   U2195    # Compose + | + - + |
+<Multi_key> <equal> <greater>            : "⇒"   U21D2    # Compose + = + >
+<Multi_key> <less> <equal>               : "⇐"   U21D0    # Compose + < + =
+<Multi_key> <equal> <asciicircum>        : "⇑"   U21D1    # Compose + = + ^
+<Multi_key> <equal> <v>                  : "⇓"   U21D3    # Compose + = + v
+
+# Horizontal Left Arrows
+<Multi_key> <less> <minus> : "←" U2190
+<Multi_key> <minus> <less> : "←" U2190
+<Multi_key> <minus> <greater> : "→" U2192
+<Multi_key> <greater> <minus> : "→" U2192

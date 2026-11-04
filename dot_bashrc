@@ -48,3 +48,4 @@ alias tree='eza --tree --icons=auto'
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/.cargo/bin:$PATH"
 export PATH=$PATH:$(go env GOPATH)/bin
+export GTK_IM_MODULE=xim
