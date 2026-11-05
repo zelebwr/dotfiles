@@ -24,14 +24,13 @@ if [ -d ~/.bashrc.d ]; then
 fi
 unset rc
 
-eval "$(/home/zele/.local/bin/mise activate bash)" # added by https://mise.run/bash
+eval "$(~/.local/bin/mise activate bash)" # added by https://mise.run/bash
+eval "$(fzf --bash)$"
+eval "$(zoxide init --cmd cd bash)"
 
 export SUDO_EDITOR="nvim"
 export VISUAL="nvim"
 export EDITOR="nvim"
-
-eval "$(fzf --bash)$"
-eval "$(zoxide init --cmd cd bash)"
 
 alias safe-charge='~/.local/bin/safe-charge.sh'
 alias full-charge='~/.local/bin/full-charge.sh'
@@ -43,6 +42,7 @@ alias cat='bat'
 alias ls='eza --icons=auto'
 alias ll='eza -lag --icons=auto --git'
 alias tree='eza --tree --icons=auto'
+alias sleepy='systemctl suspend'
 
 # Added by Antigravity CLI installer
 export PATH="$HOME/.local/bin:$PATH"

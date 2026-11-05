@@ -32,7 +32,7 @@ keymap('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Open floating diag
 -------------------------------------------
 -- Move selected lines up or down in Visual mode
 keymap('v', 'J', ":m '>+1<CR>gv=gv", opts)
-keymap('v', 'K', ":m '>-2<CR>gv=gv", opts)
+keymap('v', 'K', ":m '<-2<CR>gv=gv", opts)
 
 -- Stay in Visual mode when indenting text
 keymap('v', '<', '<gv', opts)
