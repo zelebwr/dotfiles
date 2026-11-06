@@ -1,5 +1,5 @@
 " ======================================================
-" 1. Base Foundation & Leader Key Setup
+" 1. Base Foundation & Space Key Setup
 " ======================================================
 set clipboard=unnamed
 
@@ -49,24 +49,24 @@ vnoremap K :moveLineUp<CR>gv
 " ======================================================
 " 4. File Explorer & Fuzzy Finder
 " ======================================================
-" <leader>ff -> Quick Switcher (fzf.files equivalent)
+" <Space>ff -> Quick Switcher (fzf.files equivalent)
 exmap openSwitcher obcommand switcher:open
 nmap <Space>ff :openSwitcher<CR>
 
-" <leader>fg -> Global Search (fzf.live_grep equivalent)
+" <Space>fg -> Global Search (fzf.live_grep equivalent)
 exmap globalSearch obcommand omnisearch:show-modal
 nmap <Space>fg :globalSearch<CR>
 
-" <leader>pv and - -> File Explorer (oil.nvim equivalent)
+" <Space>pv and - -> File Explorer (oil.nvim equivalent)
 exmap toggleExplorer obcommand file-explorer:open
 nmap <Space>pv :toggleExplorer<CR>
 nmap - :toggleExplorer<CR>
 
-" <leader>fd -> Document Symbols / Outline
+" <Space>fd -> Document Symbols / Outline
 exmap openOutline obcommand outline:open
 nmap <Space>fd :openOutline<CR>
 
-" <leader>fh -> Command Palette / Help Tags
+" <Space>fh -> Command Palette / Help Tags
 exmap openPalette obcommand command-palette:open
 nmap <Space>fh :openPalette<CR>
 
@@ -110,6 +110,14 @@ nmap ]b :nextTab<CR>
 exmap closeTab obcommand workspace:close
 nmap <Space>bd :closeTab<CR>
 
+" Make new tab
+exmap newTab obcommand workspace:new-tab
+nmap <Space>bt :newTab<CR>
+
+" Make new file
+exmap newFile obcommand file-explorer:new-file
+nmap <Space>bn :newFile<CR>
+
 " Toggle task checkbox
 exmap toggleChecklist obcommand editor:toggle-checklist-status
 nmap <Space>x :toggleChecklist<CR>
@@ -118,3 +126,41 @@ vmap <Space>x :toggleChecklist<CR>
 " Follow link under cursor (gd)
 exmap followLink obcommand editor:follow-link
 nmap gd :followLink<CR>
+
+" ======================================================
+" 7. Text Formatting
+" ======================================================
+" Bold
+exmap toggleBold obcommand editor:toggle-bold
+nmap <Space>mb :toggleBold<CR>
+vmap <Space>mb :toggleBold<CR>gv
+
+" Italic
+exmap toggleItalic obcommand editor:toggle-italics
+nmap <Space>mi :toggleItalic<CR>
+vmap <Space>mi :toggleItalic<CR>gv
+
+" Highlight
+exmap toggleHighlight obcommand editor:toggle-highlight
+nmap <Space>mh :toggleHighlight<CR>
+vmap <Space>mh :toggleHighlight<CR>gv
+
+" Lowercase
+exmap textLowercase obcommand obsidian-text-format:lowercase
+nmap <Space>cl :textLowercase<CR>
+vmap <Space>cl :textLowercase<CR>gv
+
+" Uppercase
+exmap textUppercase obcommand obsidian-text-format:uppercase
+nmap <Space>cu :textUppercase<CR>
+vmap <Space>cu :textUppercase<CR>gv
+
+" TItlecase
+exmap textTitlecase obcommand obsidian-text-format:title-case
+nmap <Space>ct :textTitlecase<CR>
+vmap <Space>ct :textTitlecase<CR>gv
+
+" Cycle Case
+exmap textCyclecase obcommand obsidian-text-format:cycle-case
+nmap <Space>cc :textCyclecase<CR>
+vmap <Space>cc :textCyclecase<CR>gv
