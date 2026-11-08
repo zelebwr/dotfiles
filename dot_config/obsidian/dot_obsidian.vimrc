@@ -176,5 +176,5 @@ vmap <Space>cc :textCyclecase<CR>gv
 " Blockquotes
 exmap toggleBlockquote obcommand editor:toggle-blockquote
 nmap <Space>mq :toggleBlockquote<CR>
-vmap <Space>mq :s/^/><Space>/<CR>gv
-vmap <Space>mQ :s/^><Space>//<CR>gv
+vmap <Space>mq :s/^/><Space>/<CR>
+vmap <Space>mQ :s/^><Space>//<CR>
