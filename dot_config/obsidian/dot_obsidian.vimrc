@@ -136,18 +136,21 @@ nmap gd :followLink<CR>
 " ======================================================
 " Bold
 exmap toggleBold obcommand editor:toggle-bold
+exmap surroundBold surround ** **
 nmap <Space>mb :toggleBold<CR>
-vmap <Space>mb :toggleBold<CR>gv
+vmap <Space>mb :surroundBold<CR>gv
 
 " Italic
 exmap toggleItalic obcommand editor:toggle-italics
+exmap surroundItalic surround * *
 nmap <Space>mi :toggleItalic<CR>
-vmap <Space>mi :toggleItalic<CR>gv
+vmap <Space>mi :surroundItalic<CR>gv
 
 " Highlight
 exmap toggleHighlight obcommand editor:toggle-highlight
+exmap surroundHighlight surround == ==
 nmap <Space>mh :toggleHighlight<CR>
-vmap <Space>mh :toggleHighlight<CR>gv
+vmap <Space>mh :surroundHighlight<CR>gv
 
 " Lowercase
 exmap textLowercase obcommand obsidian-text-format:lowercase
