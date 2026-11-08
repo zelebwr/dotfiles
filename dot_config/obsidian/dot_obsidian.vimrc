@@ -73,6 +73,7 @@ nmap <Space>fd :openOutline<CR>
 " <Space>fh -> Command Palette / Help Tags
 exmap openPalette obcommand command-palette:open
 nmap <Space>fh :openPalette<CR>
+vmap <Space>fh :openPalette<CR>
 
 " ======================================================
 " 5. Window Splitting & Pane Navigation
@@ -171,3 +172,9 @@ vmap <Space>ct :textTitlecase<CR>gv
 exmap textCyclecase obcommand obsidian-text-format:cycle-case
 nmap <Space>cc :textCyclecase<CR>
 vmap <Space>cc :textCyclecase<CR>gv
+
+" Blockquotes
+exmap toggleBlockquote obcommand editor:toggle-blockquote
+nmap <Space>mq :toggleBlockquote<CR>
+vmap <Space>mq :s/^/><Space>/<CR>gv
+vmap <Space>mQ :s/^><Space>//<CR>gv
