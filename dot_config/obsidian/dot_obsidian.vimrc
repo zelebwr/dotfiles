@@ -14,6 +14,10 @@ nnoremap <C-d> <C-d>zz
 nnoremap <C-u> <C-u>zz
 nmap n nzzzv
 nmap N Nzzzv
+nmap j gjzz
+nmap k gkzz
+vmap j gjzz
+vmap k gkzz
 
 " ======================================================
 " 2. Clipboard & Register Operations
