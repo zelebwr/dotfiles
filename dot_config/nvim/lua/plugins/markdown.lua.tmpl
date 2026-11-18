@@ -1,0 +1,286 @@
+return {
+    -- 1. In-Buffer Visual Rendering (render-markdown.nvim)
+    {
+        'MeanderingProgrammer/render-markdown.nvim',
+        dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-tree/nvim-web-devicons' },
+        ft = { 'markdown', 'obsidian' },
+        opts = {
+            checkbox = {
+                unchecked = { icon = '󰄱 ' },
+                checked = { icon = '󰱒 ' },
+                custom = {
+                    -- Reassign built-in 'todo' from '[-]' to '[/]' so In-Progress gets the clock icon
+                    todo = { raw = '[/]', rendered = '󰥔 ', highlight = 'RenderMarkdownTodo' },
+                    -- Map '[-]' to Cancelled with a red cancel icon and strikethrough text
+                    cancelled = {
+                        raw = '[-]',
+                        rendered = '󰰱 ',
+                        highlight = 'RenderMarkdownError',
+                        scope_highlight = '@markup.strikethrough',
+                    },
+                },
+            },
+        },
+    },
+
+    -- 2. Synchronized Live Browser Preview (markdown-preview.nvim)
+    {
+        'iamcco/markdown-preview.nvim',
+        cmd = { 'MarkdownPreviewToggle', 'MarkdownPreview', 'MarkdownPreviewStop' },
+        ft = { 'markdown' },
+        build = function()
+            require('lazy').load({ plugins = { 'markdown-preview.nvim' } })
+            vim.fn['mkdp#util#install']()
+        end,
+        init = function()
+            vim.g.mkdp_filetypes = { 'markdown' }
+        end,
+        keys = {
+          { '<leader>mp', '<cmd>MarkdownPreviewToggle<cr>', desc = 'Toggle Live Markdown Preview' },
+        },
+      },
+
+    -- 3. Obsidian Vault & Wikilink Navigation (obsidian.nvim)
+    {
+        'epwalsh/obsidian.nvim',
+        version = '*',
+        lazy = true,
+        ft = 'markdown',
+        dependencies = {
+          'nvim-lua/plenary.nvim',
+        },
+        opts = {
+            legacy_commands = false,
+            ui = {
+                enable = false,
+            },
+            workspaces = {
+                {
+                    name = 'vault',
+                    path = '{{ .obsidian_vault_path }}', -- Replace with the absolute path to your Obsidian vault
+                },
+            },
+            completion = {
+                min_chars = 2,
+            },
+            link = {
+                style = 'wiki',
+            },
+            note_id_func = function(title)
+                if title ~= nil and title ~= '' then
+                    return title:gsub('[\\/:*?"<>|]', '-')
+                end
+                return tostring(os.time())
+            end,
+        },
+        init = function()
+            -- Map go to follow [[Wikilink]] when inside an Obsidian vault note:
+            -- standalone project Markdown files outside the vault keep Marksman LSP's gd
+            vim.api.nvim_create_autocmd('User', {
+                pattern = 'ObsidianNoteEnter',
+                callback = function(ev)
+                    vim.keymap.set('n', 'gd', '<CMD>Obsidian follow_link<CR>', {
+                        buffer = ev.buf,
+                        desc = 'Obsidian: Follow Wikilink',
+                    })
+                end,
+            })
+        end,
+        keys = {
+            { '<leader>of', '<cmd>Obsidian quick_switch<cr>', desc = 'Obsidian: Find Note' },
+            { '<leader>ob', '<cmd>Obsidian backlinks<cr>', desc = 'Obsidian: Show Backlinks' },
+            { '<leader>ot', '<cmd>Obsidian tags<cr>', desc = 'Obsidian: Search Tags' },
+            { '<leader>on', '<cmd>Obsidian new<cr>', desc = 'Obsidian: New Note' },
+            { '<leader>os', '<cmd>Obsidian search<cr>', desc = 'Obsidian: Search Vault Text' },
+        },
+    },
+
+    -- 4. Text Surrounding (nvim-surround)
+    {
+        'kylechui/nvim-surround',
+        version = '*',
+        event = 'VeryLazy',
+        opts = {},
+    },
+
+    -- 5. Automated List & Bullet Continuation (bullets.vim)
+    {
+        'dkarter/bullets.vim',
+        ft = { 'markdown', 'text' },
+        config = function()
+            vim.g.bullets_enabled_file_types = { 'markdown', 'text' }
+            vim.g.bullets_enable_in_empty_buffers = 0
+            vim.g.bullets_set_mappings = 1
+        end,
+    },
+
+    -- 6. Table Cell Alignment & Navigation (vim-table-mode)
+    {
+        'dhruvasagar/vim-table-mode',
+        ft = { 'markdown' },
+        config = function()
+            vim.g.table_mode_corner = '|'
+            vim.g.table_mode_auto_align = 1
+            end,
+        keys = {
+            { '<leader>tm', '<cmd>TableModeToggle<cr>', desc = 'Toggle Table Auto-Mode' },
+        },
+    },
+
+    -- 7. Markdown Formatting Keymaps (<leader>m...) & Checkbox Cycler (<leader>x) { 'nvim-lua/plenary.nvim',
+    { 
+        'nvim-lua/plenary.nvim',
+        init = function()
+            vim.api.nvim_create_autocmd('FileType', {
+                pattern = 'markdown',
+                callback = function(event)
+                    vim.opt_local.conceallevel = 2
+
+                    vim.schedule(function()
+                        if not vim.api.nvim_buf_is_valid(event.buf) then
+                            return
+                        end
+
+                        local function delegate_bullets()
+                            local term = vim.api.nvim_replace_termcodes('<Plug>(bullets-newline)', true, true, true)
+                            vim.api.nvim_feedkeys(term, 'm', false)
+                            return ''
+                        end
+
+                        vim.keymap.set('i', '<CR>', function()
+                            local line = vim.api.nvim_get_current_line()
+
+                            -- 1. Empty blockquote line (e.g. "> " or ">> ") -> remove prefix to exit quote
+                            if line:match('^%s*>+%s*$') then
+                                return '<C-u>'
+                            end
+
+                            -- 2. Callout header (e.g. "> [!NOTE] Title") -> continue with "> "
+                            local callout_prefix = line:match('^(%s*>+)%s*%[![^%]]+%]')
+                            if callout_prefix then
+                                return '<CR>' .. callout_prefix .. ' '
+                            end
+
+                            -- 3. Active blockquote line (e.g. "> quote" or "  >> nested") -> repeat prefix
+                            local quote_prefix = line:match('^(%s*>+%s*)')
+                            if quote_prefix then
+                                return '<CR>' .. quote_prefix
+                            end
+
+                            -- 4. Bullets, numbered lists, or plain text -> hand off to bullets.vim
+                            return delegate_bullets()
+                        end, {
+                            buffer = event.buf,
+                            expr = true,
+                            replace_keycodes = true,
+                            desc = 'Smart Markdown & Blockquote Newline',
+                        })
+
+                        vim.keymap.set('n', 'o', function()
+                            local line = vim.api.nvim_get_current_line()
+
+                            local callout_prefix = line:match('^(%s*>+)%s*%[![^%]]+%]')
+                            if callout_prefix then
+                                return 'o' .. callout_prefix .. ' '
+                            end
+
+                            local quote_prefix = line:match('^(%s*>+%s*)')
+                            if quote_prefix then
+                                return 'o' .. quote_prefix
+                            end
+
+                            return delegate_bullets()
+                        end, {
+                            buffer = event.buf,
+                            expr = true,
+                            replace_keycodes = true,
+                            desc = 'Smart Markdown & Blockquote Open Line Below',
+                        })
+                    end)
+
+                    local map = function(mode, lhs, rhs, desc)
+                        vim.keymap.set(mode, lhs, rhs, { buffer = event.buf, desc = desc })
+                    end
+
+                    local function toggle_checkbox()
+                        local line = vim.api.nvim_get_current_line()
+                        if line:match('%-%s*%[%s*%]') then
+                            line = line:gsub('(%-%s*)%[%s*%]', '%1[/]')
+                        elseif line:match('%-%s*%[%/%]') then
+                            line = line:gsub('(%-%s*)%[%/%]', '%1[x]')
+                        elseif line:match('%-%s*%[x%]') then
+                            line = line:gsub('(%-%s*)%[x%]', '%1[ ]')
+                        elseif line:match('^%s*%-%s+') then
+                            line = line:gsub('(^%s*%-%s+)', '%1[ ] ')
+                        else
+                            line = line .. ' - [ ] '
+                        end
+                        vim.api.nvim_set_current_line(line)
+                    end
+
+                    map({ 'n', 'v' }, '<leader>x', toggle_checkbox, 'Cycle Checkbox ([ ] -> [/] -> [x])')
+
+                    -- Toggle Blockquote (> ) on current line (Normal) or all selected lines (Visual)
+                    local function toggle_blockquote()
+                        local mode = vim.fn.mode()
+                        local start_line, end_line
+
+                        if mode:match('[vV\22]') then
+                            local l1 = vim.fn.line('v')
+                            local l2 = vim.fn.line('.')
+                            start_line = math.min(l1, l2)
+                            end_line = math.max(l1, l2)
+                            local esc = vim.api.nvim_replace_termcodes('<Esc>', true, false, true)
+                            vim.api.nvim_feedkeys(esc, 'nx', false)
+                        else
+                            start_line = vim.fn.line('.')
+                            end_line = start_line
+                        end
+
+                        local lines = vim.api.nvim_buf_get_lines(event.buf, start_line - 1, end_line, false)
+                        local all_quoted = true
+                        for _, line in ipairs(lines) do
+                            if not line:match('^%s*>') then
+                                all_quoted = false
+                                break
+                            end
+                        end
+
+                        for i, line in ipairs(lines) do
+                            if all_quoted then
+                                lines[i] = line:gsub('^(%s*)>%s?', '%1', 1)
+                            else
+                                lines[i] = line:gsub('^(%s*)', '%1> ', 1)
+                            end
+                        end
+
+                        vim.api.nvim_buf_set_lines(event.buf, start_line - 1, end_line, false, lines)
+                    end
+
+                    map({ 'n', 'x' }, '<leader>mq', toggle_blockquote, 'Toggle Blockquote')
+
+                    -- Text Formatting (<leader>m...)
+                    map('v', '<leader>mb', 'c**<C-r>"**<Esc>', 'Format Bold')
+                    map('n', '<leader>mb', 'ciw**<C-r>"**<Esc>', 'Format Word Bold')
+
+                    map('v', '<leader>mi', 'c*<C-r>"*<Esc>', 'Format Italic')
+                    map('n', '<leader>mi', 'ciw*<C-r>"*<Esc>', 'Format Word Italic')
+
+                    map('v', '<leader>mh', 'c==<C-r>"==<Esc>', 'Format Highlight')
+                    map('n', '<leader>mh', 'ciw==<C-r>"==<Esc>', 'Format Word Highlight')
+
+                    map('v', '<leader>mc', 'c`<C-r>"`<Esc>', 'Format Inline Code')
+                    map('n', '<leader>mc', 'ciw`<C-r>"`<Esc>', 'Format Word Code')
+
+                    map('v', '<leader>mC', 'c> [!NOTE]<CR><C-r>"<Esc>', 'Format Callout Block')
+                    map('n', '<leader>mC', 'I> [!NOTE]<CR><Esc>', 'Format Callout Block')
+
+                    map('v', '<leader>mk', 'c[<C-r>"]() <Esc>i', 'Format Link')
+
+                    -- Document Outline / Table of Contents
+                    map('n', '<leader>mt', '<cmd>FzfLua lsp_document_symbols<cr>', 'Markdown Outline / TOC')
+                end,
+            })
+        end,
+    },
+}

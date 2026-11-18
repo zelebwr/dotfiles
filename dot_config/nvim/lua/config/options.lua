@@ -18,7 +18,9 @@ end
 opt.number = true
 opt.relativenumber = true
 opt.scrolloff = 8           -- Keep 8 lines above/below cursor when scrolling
-opt.wrap = false            -- Disable line wrapping
+opt.wrap = true
+opt.linebreak = true
+opt.breakindent = true
 
 --------------------------------
 -- 2. Indentation & Tabs
