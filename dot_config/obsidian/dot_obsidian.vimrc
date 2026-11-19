@@ -123,6 +123,10 @@ nmap <Space>bt :newTab<CR>
 exmap newFile obcommand file-explorer:new-file
 nmap <Space>bn :newFile<CR>
 
+" Rename file title
+exmap renameFile obcommand workspace:edit-file-title
+nmap <Space>rn :renameFile<CR>
+
 " Toggle task checkbox
 exmap toggleChecklist obcommand editor:toggle-checklist-status
 nmap <Space>x :toggleChecklist<CR>
