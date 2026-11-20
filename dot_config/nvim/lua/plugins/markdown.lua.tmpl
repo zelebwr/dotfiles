@@ -275,14 +275,13 @@ return {
                     map('v', '<leader>mC', 'c> [!NOTE]<CR><C-r>"<Esc>', 'Format Callout Block')
                     map('n', '<leader>mC', 'I> [!NOTE]<CR><Esc>', 'Format Callou Block')
 
-                    map('v', '<leader>mk', 'c[<C-r>"]() <Esc>i', 'Format Link')
+                    map('n', '<leader>mk', 'ciw[<C-r>"]()<Esc>i', 'Format Word Link')
+                    map('v', '<leader>mk', 'c[<C-r>"]()<Esc>i', 'Format Link')
+                    map('n', '<leader>mw', 'ciw[[<C-r>"]]<Esc>', 'Format Word Wikilink')
+                    map('v', '<leader>mw', 'c[[<C-r>"]]<Esc>', 'Format Wikilink')
 
                     -- Document Outline / Table of Contents
                     map('n', '<leader>mt', '<cmd>FzfLua lsp_document_symbols<cr>', 'Markdown Outline / TOC')
-
-                    map('v', '<leader>mk', 'c[<C-r>"]() <Esc>i', 'Format Link')
-                    map('v', '<leader>mw', 'c[[<C-r>"]]<Esc>', 'Format Wikilink')
-                    map('n', '<leader>mw', 'ciw[[<C-r>"]]<Esc>', 'Format Word Wikilink')
                 end,
             })
         end,
