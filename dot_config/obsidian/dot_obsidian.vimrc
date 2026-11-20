@@ -154,7 +154,7 @@ nmap <Space>os :globalSearch<CR>
 " 7. Markdown Formatting, Previews, Tables & Folding
 " ======================================================
 " Toggle task checkbox (<Space>x)
-exmap toggleChecklist obcommand editor:toggle-checklist-status
+exmap toggleChecklist obcommand obsidian-tasks-plugin:toggle-done
 nmap <Space>x :toggleChecklist<CR>
 vmap <Space>x :toggleChecklist<CR>
 
