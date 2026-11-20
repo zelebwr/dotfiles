@@ -202,6 +202,33 @@ return {
                         vim.keymap.set(mode, lhs, rhs, { buffer = event.buf, desc = desc })
                     end
 
+                    local function adjust_md_heading(delta)
+                        local row, col = unpack(vim.api.nvim_win_get_cursor(0))
+                        local line = vim.api.nvim_get_current_line()
+                        local indent, hashes, text = line:match('^(%s*)(#*)%s*(.*)$')
+
+                        local new_count = math.max(0, math.min(6, #hashes + delta))
+                        if new_count == #hashes then
+                            return
+                        end
+
+                        local new_line
+                        if new_count == 0 then
+                            new_line = indent .. text
+                        else
+                            new_line = indent .. string.rep('#', new_count) .. ' ' .. text
+                        end
+
+                        vim.api.nvim_set_current_line(new_line)
+                        local diff = #new_line - #line
+                        vim.api.nvim_win_set_cursor(0, { row, math.max(0, col + diff) })
+                    end
+
+                    map({ 'n', 'i' }, '<C-S-]>', function() adjust_md_heading(1) end, 'Increase Markdown Heading')
+                    map({ 'n', 'i' }, '<C-}>', function() adjust_md_heading(1) end, 'Increase Markdown Heading')
+                    map({ 'n', 'i' }, '<C-S-[>', function() adjust_md_heading(-1) end, 'Decrease Markdown Heading')
+                    map({ 'n', 'i' }, '<C-{>', function() adjust_md_heading(-1) end, 'Decrease Markdown Heading')
+
                     local function toggle_checkbox()
                         local line = vim.api.nvim_get_current_line()
                         if line:match('%-%s*%[%s*%]') then
